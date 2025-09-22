@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 const AdminPanel = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -48,14 +48,20 @@ const AdminPanel = () => {
 
   const fetchData = async (authToken) => {
     try {
-      const usersRes = await axios.get(`${API_BASE_URL}/admin/cars/users`, {
-        headers: { Authorization: `Bearer ${authToken}` },
-      });
+      const usersRes = await axios.get(
+        `${API_BASE_URL}/admin/cars/users`,
+        {
+          headers: { Authorization: `Bearer ${authToken}` },
+        }
+      );
       setUsers(usersRes.data);
 
-      const carsRes = await axios.get(`${API_BASE_URL}/admin/cars`, {
-        headers: { Authorization: `Bearer ${authToken}` },
-      });
+      const carsRes = await axios.get(
+        `${API_BASE_URL}/admin/cars`,
+        {
+          headers: { Authorization: `Bearer ${authToken}` },
+        }
+      );
       setCars(carsRes.data);
 
       const cabBookingsRes = await axios.get(

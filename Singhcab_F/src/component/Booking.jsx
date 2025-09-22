@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export default function BookingForm({ selectedCar, onBookingSuccess }) {
   const [showSelfDriveForm, setShowSelfDriveForm] = useState(false);
@@ -118,7 +118,7 @@ export default function BookingForm({ selectedCar, onBookingSuccess }) {
             message: `New booking for ${JSON.stringify(formData)} `,
           }),
         });
-     
+
         alert("Booking successful!");
         if (onBookingSuccess) onBookingSuccess();
         // Reset form
