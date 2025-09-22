@@ -19,6 +19,7 @@ export default function Hero() {
       endDate: formData.get("endDate"),
     };
     localStorage.setItem("bookingData", JSON.stringify(data));
+    localStorage.setItem("bookingMode", "cab"); // 🚀 tell BookingForm to open Cab tab
     navigate("/bookingForm");
   };
 
@@ -28,11 +29,12 @@ export default function Hero() {
     const formData = new FormData(e.target);
     const data = {
       license: formData.get("license"),
-      age: formData.get("age"),
+      dob: formData.get("dob"),
       carModel: formData.get("carModel"),
       duration: formData.get("duration"),
     };
     localStorage.setItem("selfDriveBooking", JSON.stringify(data));
+    localStorage.setItem("bookingMode", "selfdrive"); // 🚀 tell BookingForm to open SelfDrive tab
     navigate("/bookingForm");
   };
 
@@ -85,7 +87,8 @@ export default function Hero() {
         </p>
         <motion.button
           whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }} onClick={() => navigate("/vehicles")}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => navigate("/vehicles")}
           className="mt-8 md:mt-14 px-6 py-3 bg-yellow-400 text-black font-bold rounded-lg"
         >
           View All Cars

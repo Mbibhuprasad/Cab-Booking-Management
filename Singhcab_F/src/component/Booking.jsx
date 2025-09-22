@@ -28,6 +28,15 @@ export default function BookingForm({ selectedCar, onBookingSuccess }) {
   });
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    const mode = localStorage.getItem("bookingMode");
+    if (mode === "selfdrive") {
+      setShowSelfDriveForm(true);
+    } else {
+      setShowSelfDriveForm(false);
+    }
+  }, []);
+
   // Fetch all cars once
   useEffect(() => {
     const fetchCars = async () => {

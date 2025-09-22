@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 
+// Placeholder for API URL since environment variables aren't available
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 const AdminPanel = () => {
@@ -26,16 +27,19 @@ const AdminPanel = () => {
     engine: "",
     mileage: "",
     price: "",
-    pricePerKm: "", // New field added
-    pricePerHour: "", // New field added
+    pricePerKm: "",
+    pricePerHour: "",
     fullDetails: "",
     images: [],
   });
   const [selectedFile, setSelectedFile] = useState([]);
-  const [activeTab, setActiveTab] = useState("cab-bookings"); // Start on cab bookings tab
+  const [activeTab, setActiveTab] = useState("cab-bookings");
   const [editingCar, setEditingCar] = useState(null);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [confirmData, setConfirmData] = useState(null);
+  const [deletingImage, setDeletingImage] = useState(null);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("adminToken");
@@ -48,20 +52,14 @@ const AdminPanel = () => {
 
   const fetchData = async (authToken) => {
     try {
-      const usersRes = await axios.get(
-        `${API_BASE_URL}/admin/cars/users`,
-        {
-          headers: { Authorization: `Bearer ${authToken}` },
-        }
-      );
+      const usersRes = await axios.get(`${API_BASE_URL}/admin/cars/users`, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
       setUsers(usersRes.data);
 
-      const carsRes = await axios.get(
-        `${API_BASE_URL}/admin/cars`,
-        {
-          headers: { Authorization: `Bearer ${authToken}` },
-        }
-      );
+      const carsRes = await axios.get(`${API_BASE_URL}/admin/cars`, {
+        headers: { Authorization: `Bearer ${authToken}` },
+      });
       setCars(carsRes.data);
 
       const cabBookingsRes = await axios.get(
@@ -119,57 +117,59 @@ const AdminPanel = () => {
     setPassword("");
   };
 
-  const handleDeleteUser = async (userId) => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
-      try {
-        await axios.delete(`${API_BASE_URL}/admin/cars/users/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setUsers(users.filter((user) => user._id !== userId));
-        setSuccess("User deleted successfully.");
-        setTimeout(() => setSuccess(""), 3000);
-      } catch (err) {
-        setError("Failed to delete user.");
-        setTimeout(() => setError(""), 3000);
-      }
-    }
+  const handleConfirmAction = (action, data) => {
+    setConfirmData({ action, data });
+    setShowConfirmModal(true);
   };
 
-  const handleDeleteCabBooking = async (bookingId) => {
-    if (window.confirm("Are you sure you want to delete this cab booking?")) {
-      try {
-        await axios.delete(`${API_BASE_URL}/bookings/cab/${bookingId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setCabBookings(
-          cabBookings.filter((booking) => booking._id !== bookingId)
-        );
-        setSuccess("Cab booking deleted successfully.");
-        setTimeout(() => setSuccess(""), 3000);
-      } catch (err) {
-        setError("Failed to delete cab booking.");
-        setTimeout(() => setError(""), 3000);
+  const executeAction = async () => {
+    setShowConfirmModal(false);
+    const { action, data } = confirmData;
+    try {
+      switch (action) {
+        case "deleteUser":
+          await axios.delete(`${API_BASE_URL}/admin/cars/users/${data}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setUsers(users.filter((user) => user._id !== data));
+          setSuccess("User deleted successfully.");
+          break;
+        case "deleteCabBooking":
+          await axios.delete(`${API_BASE_URL}/bookings/cab/${data}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setCabBookings(cabBookings.filter((booking) => booking._id !== data));
+          setSuccess("Cab booking deleted successfully.");
+          break;
+        case "deleteSelfDriveBooking":
+          await axios.delete(`${API_BASE_URL}/bookings/self-drive/${data}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setSelfDriveBookings(
+            selfDriveBookings.filter((booking) => booking._id !== data)
+          );
+          setSuccess("Self-drive booking deleted successfully.");
+          break;
+        case "deleteCar":
+          await axios.delete(`${API_BASE_URL}/admin/cars/${data}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setCars(cars.filter((car) => car._id !== data));
+          setSuccess("Car deleted successfully.");
+          break;
+        default:
+          break;
       }
-    }
-  };
-
-  const handleDeleteSelfDriveBooking = async (bookingId) => {
-    if (
-      window.confirm("Are you sure you want to delete this self-drive booking?")
-    ) {
-      try {
-        await axios.delete(`${API_BASE_URL}/bookings/self-drive/${bookingId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setSelfDriveBookings(
-          selfDriveBookings.filter((booking) => booking._id !== bookingId)
-        );
-        setSuccess("Self-drive booking deleted successfully.");
-        setTimeout(() => setSuccess(""), 3000);
-      } catch (err) {
-        setError("Failed to delete self-drive booking.");
-        setTimeout(() => setError(""), 3000);
-      }
+      setTimeout(() => setSuccess(""), 3000);
+    } catch (err) {
+      console.error(
+        "Deletion failed:",
+        err.response ? err.response.data : err.message
+      );
+      setError(
+        `Failed to delete. Error: ${err.response?.data?.message || err.message}`
+      );
+      setTimeout(() => setError(""), 3000);
     }
   };
 
@@ -180,6 +180,52 @@ const AdminPanel = () => {
 
   const handleImageChange = (e) => {
     setSelectedFile(e.target.files);
+  };
+
+  const handleRemoveImage = async (imageName) => {
+    if (!editingCar) {
+      // If not in edit mode, just remove from local state
+      setNewCar({
+        ...newCar,
+        images: newCar.images.filter((img) => img !== imageName),
+      });
+      return;
+    }
+
+    // If in edit mode, delete from server
+    setDeletingImage(imageName);
+    try {
+      await axios.delete(
+        `${API_BASE_URL}/admin/cars/${editingCar._id}/images/${imageName}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      // Update local state after successful deletion
+      setNewCar({
+        ...newCar,
+        images: newCar.images.filter((img) => img !== imageName),
+      });
+
+      // Also update the cars list to reflect the change
+      setCars(
+        cars.map((car) =>
+          car._id === editingCar._id
+            ? { ...car, images: car.images.filter((img) => img !== imageName) }
+            : car
+        )
+      );
+
+      setSuccess("Image deleted successfully!");
+      setTimeout(() => setSuccess(""), 3000);
+    } catch (err) {
+      console.error("Failed to delete image:", err);
+      setError("Failed to delete image. Please try again.");
+      setTimeout(() => setError(""), 3000);
+    } finally {
+      setDeletingImage(null);
+    }
   };
 
   const handleAddCar = async (e) => {
@@ -194,7 +240,11 @@ const AdminPanel = () => {
 
     const formData = new FormData();
     for (const key in newCar) {
-      formData.append(key, newCar[key]);
+      if (key === "images") {
+        newCar.images.forEach((img) => formData.append("images", img));
+      } else {
+        formData.append(key, newCar[key]);
+      }
     }
     for (let i = 0; i < selectedFile.length; i++) {
       formData.append("images", selectedFile[i]);
@@ -222,6 +272,7 @@ const AdminPanel = () => {
         pricePerKm: "",
         pricePerHour: "",
         fullDetails: "",
+        images: [],
       });
       setSelectedFile([]);
       setSuccess("Car added successfully!");
@@ -235,7 +286,7 @@ const AdminPanel = () => {
 
   const handleEditCarClick = (car) => {
     setEditingCar(car);
-    setNewCar(car);
+    setNewCar({ ...car });
     setActiveTab("add-car");
   };
 
@@ -246,10 +297,15 @@ const AdminPanel = () => {
 
     const formData = new FormData();
     for (const key in newCar) {
-      formData.append(key, newCar[key]);
+      if (key === "images") {
+        // Send existing images that haven't been deleted
+        newCar.images.forEach((img) => formData.append("existingImages", img));
+      } else {
+        formData.append(key, newCar[key]);
+      }
     }
     for (let i = 0; i < selectedFile.length; i++) {
-      formData.append("images", selectedFile[i]);
+      formData.append("newImages", selectedFile[i]);
     }
 
     try {
@@ -279,6 +335,7 @@ const AdminPanel = () => {
         pricePerKm: "",
         pricePerHour: "",
         fullDetails: "",
+        images: [],
       });
       setSelectedFile([]);
       setSuccess("Car updated successfully!");
@@ -287,22 +344,6 @@ const AdminPanel = () => {
     } catch (err) {
       setError("Failed to update car. Please try again.");
       setTimeout(() => setError(""), 3000);
-    }
-  };
-
-  const handleDeleteCar = async (carId) => {
-    if (window.confirm("Are you sure you want to delete this car?")) {
-      try {
-        await axios.delete(`${API_BASE_URL}/admin/cars/${carId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setCars(cars.filter((car) => car._id !== carId));
-        setSuccess("Car deleted successfully.");
-        setTimeout(() => setSuccess(""), 3000);
-      } catch (err) {
-        setError("Failed to delete car.");
-        setTimeout(() => setError(""), 3000);
-      }
     }
   };
 
@@ -396,6 +437,7 @@ const AdminPanel = () => {
               pricePerKm: "",
               pricePerHour: "",
               fullDetails: "",
+              images: [],
             });
           }}
           className={`w-full px-4 py-3 font-semibold rounded-lg text-left transition-colors ${
@@ -440,6 +482,28 @@ const AdminPanel = () => {
         </header>
 
         <main className="min-h-[calc(100vh-250px)]">
+          {showConfirmModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm text-center">
+                <h3 className="font-bold text-lg mb-4">Confirm Deletion</h3>
+                <p>Are you sure you want to delete this item?</p>
+                <div className="mt-6 flex justify-center gap-4">
+                  <button
+                    onClick={() => setShowConfirmModal(false)}
+                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-md transition-colors"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={executeAction}
+                    className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-md transition-colors"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
           {error && (
             <p className="bg-red-100 text-red-700 p-3 rounded-md text-sm mb-4 text-center">
               {error}
@@ -492,7 +556,9 @@ const AdminPanel = () => {
                           </p>
                         </div>
                         <button
-                          onClick={() => handleDeleteCabBooking(booking._id)}
+                          onClick={() =>
+                            handleConfirmAction("deleteCabBooking", booking._id)
+                          }
                           className="bg-red-500 text-white font-bold py-1 px-3 rounded-md hover:bg-red-600 transition-colors"
                         >
                           Delete
@@ -554,7 +620,10 @@ const AdminPanel = () => {
                         </div>
                         <button
                           onClick={() =>
-                            handleDeleteSelfDriveBooking(booking._id)
+                            handleConfirmAction(
+                              "deleteSelfDriveBooking",
+                              booking._id
+                            )
                           }
                           className="bg-red-500 text-white font-bold py-1 px-3 rounded-md hover:bg-red-600 transition-colors"
                         >
@@ -753,9 +822,71 @@ const AdminPanel = () => {
                       className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     ></textarea>
                   </div>
+
+                  {editingCar && newCar.images.length > 0 && (
+                    <div className="mt-4">
+                      <p className="block text-gray-700 font-bold mb-2">
+                        Existing Images
+                      </p>
+                      <div className="flex flex-wrap gap-4">
+                        {newCar.images.map((image, index) => (
+                          <div key={index} className="relative group">
+                            <img
+                              src={`${API_BASE_URL}/uploads/cars/${image}`}
+                              alt={`Car image ${index}`}
+                              className="w-24 h-24 object-cover rounded-md"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveImage(image)}
+                              disabled={deletingImage === image}
+                              className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-50"
+                              title="Delete image"
+                            >
+                              {deletingImage === image ? (
+                                <svg
+                                  className="animate-spin h-4 w-4"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <circle
+                                    className="opacity-25"
+                                    cx="12"
+                                    cy="12"
+                                    r="10"
+                                    stroke="currentColor"
+                                    strokeWidth="4"
+                                    fill="none"
+                                  />
+                                  <path
+                                    className="opacity-75"
+                                    fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                  />
+                                </svg>
+                              ) : (
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-4 w-4"
+                                  viewBox="0 0 20 20"
+                                  fill="currentColor"
+                                >
+                                  <path
+                                    fillRule="evenodd"
+                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                    clipRule="evenodd"
+                                  />
+                                </svg>
+                              )}
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
                   <div>
                     <label className="block text-gray-700 font-bold mb-1">
-                      Upload Images
+                      {editingCar ? "Upload New Images" : "Upload Images"}
                     </label>
                     <input
                       type="file"
@@ -795,7 +926,7 @@ const AdminPanel = () => {
                       >
                         {car.images && car.images.length > 0 && (
                           <img
-                            src={`http://localhost:5000/uploads/cars/${car.images[0]}`}
+                            src={`${API_BASE_URL}/uploads/cars/${car.images[0]}`}
                             alt={car.name}
                             className="w-full h-48 object-cover"
                           />
@@ -821,7 +952,9 @@ const AdminPanel = () => {
                               Edit
                             </button>
                             <button
-                              onClick={() => handleDeleteCar(car._id)}
+                              onClick={() =>
+                                handleConfirmAction("deleteCar", car._id)
+                              }
                               className="bg-red-500 text-white font-bold py-1 px-3 rounded-md hover:bg-red-600 transition-colors"
                             >
                               Delete
@@ -861,7 +994,9 @@ const AdminPanel = () => {
                           </span>
                         </span>
                         <button
-                          onClick={() => handleDeleteUser(user._id)}
+                          onClick={() =>
+                            handleConfirmAction("deleteUser", user._id)
+                          }
                           className="bg-red-500 text-white font-bold py-1 px-3 rounded-md hover:bg-red-600 transition-colors"
                         >
                           Delete

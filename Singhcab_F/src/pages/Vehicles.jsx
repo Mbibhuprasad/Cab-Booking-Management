@@ -4,7 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 // API Base URL for your backend
-const API_BASE_URL = "http://localhost:5000/api";
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 const Modal = ({ car, onClose }) => {
   if (!car) return null;
@@ -53,7 +53,7 @@ const Modal = ({ car, onClose }) => {
             {car.images.map((image, index) => (
               <img
                 key={index}
-                src={`http://localhost:5000/uploads/cars/${image}`}
+                src={`${API_BASE_URL}/uploads/cars/${image}`}
                 alt={`${car.name} - ${index + 1}`}
                 className="rounded-lg w-full h-24 sm:h-36 md:h-40 object-cover transition-transform transform hover:scale-105"
               />
@@ -287,7 +287,7 @@ export default function App() {
               <div className="relative">
                 {car.images && car.images.length > 0 ? (
                   <img
-                    src={`http://localhost:5000/uploads/cars/${car.images[0]}`}
+                    src={`${API_BASE_URL}/uploads/cars/${car.images[0]}`}
                     alt={car.name}
                     className="w-full h-48 sm:h-56 object-cover"
                   />
