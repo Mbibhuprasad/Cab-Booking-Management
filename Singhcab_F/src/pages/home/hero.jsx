@@ -18,8 +18,9 @@ export default function Hero() {
       startDate: formData.get("startDate"),
       endDate: formData.get("endDate"),
     };
+    // Save to localStorage for BookingForm auto-fill
     localStorage.setItem("bookingData", JSON.stringify(data));
-    localStorage.setItem("bookingMode", "cab"); // 🚀 tell BookingForm to open Cab tab
+    localStorage.setItem("bookingMode", "cab"); // open Cab tab
     navigate("/bookingForm");
   };
 
@@ -34,7 +35,7 @@ export default function Hero() {
       duration: formData.get("duration"),
     };
     localStorage.setItem("selfDriveBooking", JSON.stringify(data));
-    localStorage.setItem("bookingMode", "selfdrive"); // 🚀 tell BookingForm to open SelfDrive tab
+    localStorage.setItem("bookingMode", "selfdrive"); // open SelfDrive tab
     navigate("/bookingForm");
   };
 
@@ -59,7 +60,6 @@ export default function Hero() {
     hidden: { x: -100, opacity: 0 },
     visible: { x: 0, opacity: 1, transition: { duration: 1 } },
   };
-
   const fadeInRight = {
     hidden: { x: 100, opacity: 0 },
     visible: { x: 0, opacity: 1, transition: { duration: 1 } },
@@ -104,8 +104,7 @@ export default function Hero() {
       >
         <motion.div
           whileHover={{ scale: 1.02 }}
-          className="w-full max-w-[450px] p-8 md:p-10 rounded-xl shadow-lg border border-yellow-400 
-                     bg-black/30 backdrop-blur-lg"
+          className="w-full max-w-[450px] p-8 md:p-10 rounded-xl shadow-lg border border-yellow-400 bg-black/30 backdrop-blur-lg"
         >
           <div className="flex justify-between mb-6 text-white font-bold text-lg">
             <h3
@@ -139,12 +138,12 @@ export default function Hero() {
               <select
                 name="carType"
                 onChange={handleChange}
-                className="p-2 rounded border border-gray-400 text-black"
+                className="p-2 rounded border border-gray-400 text-white"
               >
-                <option>Select Car Type</option>
-                <option>Sedan</option>
-                <option>SUV</option>
-                <option>Luxury</option>
+                <option className="text-black">Select Car Type</option>
+                <option className="text-black">Mini</option>
+                <option className="text-black">Sedan</option>
+                <option className="text-black">XL</option>
               </select>
 
               <label className="text-sm">Pickup Location</label>
@@ -164,27 +163,6 @@ export default function Hero() {
                 placeholder="Enter Drop Location"
                 className="p-2 rounded bg-transparent border border-gray-400"
               />
-
-              <div className="flex gap-3 flex-col md:flex-row">
-                <div className="w-full md:w-1/2 flex flex-col">
-                  <label className="text-sm">Start Date</label>
-                  <input
-                    type="date"
-                    name="startDate"
-                    onChange={handleChange}
-                    className="p-2 rounded bg-transparent border border-gray-400"
-                  />
-                </div>
-                <div className="w-full md:w-1/2 flex flex-col">
-                  <label className="text-sm">End Date</label>
-                  <input
-                    type="date"
-                    name="endDate"
-                    onChange={handleChange}
-                    className="p-2 rounded bg-transparent border border-gray-400"
-                  />
-                </div>
-              </div>
 
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -216,16 +194,7 @@ export default function Hero() {
                 type="date"
                 name="dob"
                 onChange={handleChange}
-                className="p-2 rounded bg-transparent border border-gray-400"
-              />
-
-              <label className="text-sm">Car Model</label>
-              <input
-                type="text"
-                name="carModel"
-                onChange={handleChange}
-                placeholder="Enter Car Model"
-                className="p-2 rounded bg-transparent border border-gray-400"
+                className="p-2 rounded border border-gray-400 bg-gray-200 text-black"
               />
 
               <label className="text-sm">Rental Duration (Hours)</label>

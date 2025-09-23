@@ -554,6 +554,16 @@ const AdminPanel = () => {
                             {new Date(booking.startDate).toLocaleDateString()}{" "}
                             to {new Date(booking.endDate).toLocaleDateString()}
                           </p>
+                          <p className="text-xs text-gray-500">
+                            <strong>Dates:</strong>{" "}
+                            {new Date(booking.startDate).toLocaleDateString()}{" "}
+                            to {new Date(booking.endDate).toLocaleDateString()}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            <strong>Booked On:</strong>{" "}
+                            {new Date(booking.createdAt).toLocaleDateString()}{" "}
+                            {new Date(booking.createdAt).toLocaleTimeString()}
+                          </p>
                         </div>
                         <button
                           onClick={() =>
@@ -616,6 +626,15 @@ const AdminPanel = () => {
                           <p className="text-xs text-gray-500">
                             <strong>DOB:</strong>{" "}
                             {new Date(booking.dob).toLocaleDateString()}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            <strong>DOB:</strong>{" "}
+                            {new Date(booking.dob).toLocaleDateString()}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            <strong>Booked On:</strong>{" "}
+                            {new Date(booking.createdAt).toLocaleDateString()}{" "}
+                            {new Date(booking.createdAt).toLocaleTimeString()}
                           </p>
                         </div>
                         <button

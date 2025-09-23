@@ -138,12 +138,12 @@ const ContactAndBooking = () => {
           <ContactCard
             icon={phoneIcon}
             title="CALL US"
-            content={["+537 547-6401", "24/7 Support Available"]}
+            content={["+91-8971686464", "24/7 Support Available"]}
           />
           <ContactCard
             icon={emailIcon}
             title="EMAIL US"
-            content={["nwiger@yahoo.com", "Response within 2 hours"]}
+            content={["absara8794@gmail.com", "Response within 2 hours"]}
           />
           <ContactCard
             icon={chatIcon}
@@ -357,7 +357,7 @@ const ContactAndBooking = () => {
             >
               <div className="absolute top-0 bottom-0 left-0 w-full bg-black md:bg-transparent md:w-full md:bg-transparent transform skew-y-12 origin-bottom-right"></div>
               <img
-                src="https://i.pinimg.com/236x/94/3b/37/943b3731d7471be0fc3f6af944ed0f74.jpg"
+                src="https://i.pinimg.com/originals/db/d3/b1/dbd3b1e13599dbaf83e0d88b4a35367c.jpg"
                 alt="Red Ford Mustang"
                 className="absolute w-full h-full object-cover"
               />

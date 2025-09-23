@@ -29,7 +29,7 @@ export default function Features() {
           whileInView={{ y: 0, opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: i * 0.3 }}
-          className="w-full md:w-1/3 flex flex-col items-center"
+          className="w-full md:w-1/4 flex flex-col items-center"
         >
           {/* Icon with black circle */}
           <div className="w-20 h-20 flex items-center justify-center rounded-full bg-[#111] mb-4 shadow-md shadow-yellow-500/30">

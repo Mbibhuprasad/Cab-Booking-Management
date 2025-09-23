@@ -3,25 +3,26 @@ import { motion } from "framer-motion";
 const steps = [
   {
     no: 1,
-    head: "Erat at semper",
-    text: "Choose from our wide selection of premium vehicles that suit your needs and budget.",
+    head: "Choose Your Ride",
+    text: "Browse through Singh Cab's premium fleet, featuring both chauffeur-driven cabs and self-drive vehicles to match your style and budget.",
   },
   {
     no: 2,
-    head: "Urna nec vivamus risus duis arcu",
-    text: "Select your pickup and return locations along with your preferred dates.",
+    head: "Select Location & Date",
+    text: "Easily select your pickup and drop locations along with your preferred dates for cab booking or self-drive rental.",
   },
   {
     no: 3,
-    head: "Lobortis euismod imperdiet tempus",
-    text: "Complete your booking with our secure payment process and get instant confirmation.",
+    head: "Secure Your Booking",
+    text: "Complete your reservation through our fast and secure online process, and receive instant confirmation for peace of mind.",
   },
   {
     no: 4,
-    head: "Cras nulla aliquet nam eleifend amet et",
-    text: "Pick up your car and enjoy your journey with our 24/7 roadside assistance.",
+    head: "Enjoy Your Journey",
+    text: "Pick up your cab or self-drive vehicle and enjoy a seamless experience with Singh Cab, backed by 24/7 roadside assistance and customer support.",
   },
 ];
+
 
 const Steps = () => {
   return (
@@ -36,7 +37,7 @@ const Steps = () => {
           className="flex justify-center"
         >
           <img
-            src="https://images.pexels.com/photos/12543725/pexels-photo-12543725.jpeg"
+            src="https://images.pexels.com/photos/31636698/pexels-photo-31636698.jpeg"
             alt="Car"
             className="rounded-lg shadow-lg w-full max-w-md h-[28rem] object-cover"
           />

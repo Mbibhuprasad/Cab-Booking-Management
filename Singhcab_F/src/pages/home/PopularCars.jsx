@@ -25,6 +25,11 @@ export default function PopularCars() {
 
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
+  const handleNavigate = (carName) => {
+    localStorage.setItem("selectedType", carName); // save type for Vehicles page
+    navigate("/vehicles");
+  };
+
   return (
     <section className="flex flex-col justify-center items-center my-10 px-4 md:px-8">
       {/* Header */}
@@ -88,7 +93,7 @@ export default function PopularCars() {
                 style={{
                   pointerEvents: hoveredIndex === idx ? "auto" : "none",
                 }}
-                onClick={() => navigate("/vehicles")}
+                onClick={() => handleNavigate(car.name)}
               >
                 <span>See All Cars</span>
                 <svg

@@ -95,10 +95,7 @@ const Modal = ({ car, onClose }) => {
                 <p className="text-sm text-gray-400">Price per Hour</p>
                 <p className="text-lg font-medium">₹{car.pricePerHour}</p>
               </div>
-              <div className="bg-gray-900 p-3 sm:p-4 rounded-lg col-span-1 sm:col-span-2">
-                <p className="text-sm text-gray-400">Total Price</p>
-                <p className="text-lg font-medium">{car.price}</p>
-              </div>
+              
             </div>
 
             <div className="mt-4">
@@ -139,6 +136,15 @@ export default function App() {
       }
     };
     fetchCarData();
+  }, []);
+
+  // inside your Vehicles component
+  useEffect(() => {
+    const savedType = localStorage.getItem("selectedType");
+    if (savedType) {
+      setSelectedType(savedType);
+      localStorage.removeItem("selectedType"); // clear after use
+    }
   }, []);
 
   useEffect(() => {
@@ -184,8 +190,14 @@ export default function App() {
     setShowModal(true);
   };
 
-  const handleBookNow = () => {
-    // Navigate to the booking form and pass the car ID as a state
+  const handleBookNow = (car) => {
+    // Save car data to localStorage for auto-fill in booking form
+    localStorage.setItem("selectedCar", JSON.stringify({
+      carType: car.type,
+      carModel: car.model
+    }));
+    
+    // Navigate to the booking form
     navigate(`/bookingForm`);
   };
 
@@ -346,7 +358,7 @@ export default function App() {
                 </div>
                 <div className="flex flex-col sm:flex-row justify-center gap-3">
                   <button
-                    onClick={() => handleBookNow(car._id)}
+                    onClick={() => handleBookNow(car)}
                     className="flex-1 px-4 py-2 sm:py-3 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold rounded-lg shadow-lg transition-transform transform hover:scale-105 duration-300"
                   >
                     BOOK NOW
