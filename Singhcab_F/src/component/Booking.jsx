@@ -171,7 +171,7 @@ export default function BookingForm({ selectedCar, onBookingSuccess }) {
         });
 
         setShowSuccessPopup(true);
-        setTimeout(() => setShowSuccessPopup(false), 3000); // hide after 3 sec
+        setTimeout(() => setShowSuccessPopup(false), 9000); // hide after 3 sec
 
         // Clear the saved car data after successful booking
         localStorage.removeItem("selectedCar");
@@ -244,7 +244,7 @@ export default function BookingForm({ selectedCar, onBookingSuccess }) {
             {/* Conditional Forms */}
             {!showSelfDriveForm ? (
               <form
-                className="grid grid-cols-2 gap-4 text-white"
+                className="md:grid grid-cols-2 gap-4 text-white"
                 onSubmit={handleSubmit}
               >
                 {/* Column 1 */}
@@ -396,7 +396,7 @@ export default function BookingForm({ selectedCar, onBookingSuccess }) {
               </form>
             ) : (
               <form
-                className="grid grid-cols-2 gap-4 text-white"
+                className="sm:grid grid-cols-2 gap-4 text-white"
                 onSubmit={handleSubmit}
               >
                 <div className="flex flex-col gap-3">

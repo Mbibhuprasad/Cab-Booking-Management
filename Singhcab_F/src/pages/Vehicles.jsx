@@ -88,11 +88,11 @@ const Modal = ({ car, onClose }) => {
                 <p className="text-lg font-medium">{car.mileage}</p>
               </div>
               <div className="bg-gray-900 p-3 sm:p-4 rounded-lg">
-                <p className="text-sm text-gray-400">Price per Km</p>
+                <p className="text-sm text-gray-400">Price per Km (for cab)</p>
                 <p className="text-lg font-medium">₹{car.pricePerKm}</p>
               </div>
               <div className="bg-gray-900 p-3 sm:p-4 rounded-lg">
-                <p className="text-sm text-gray-400">Price per Hour</p>
+                <p className="text-sm text-gray-400">Price per Hour (for self drive)</p>
                 <p className="text-lg font-medium">₹{car.pricePerHour}</p>
               </div>
               

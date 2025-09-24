@@ -1,29 +1,36 @@
 import { motion } from "framer-motion";
-import location from "../../assets/location-location-route-wavy_78370-4227-Photoroom.png";
 
 export default function LocationCards() {
   const locations = [
     {
       id: 1,
       title: "Bhubaneswar to Puri",
-      images: [
-        "https://www.avis.co.in/blog/wp-content/uploads/2024/03/image1-4.jpg", // Bhubaneswar
-        location, // location icon
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Shri_Jagannatha_Temple.jpg/1200px-Shri_Jagannatha_Temple.jpg", // Puri
-      ],
+      image:
+        "https://cdnl.iconscout.com/lottie/premium/thumb/pesquisa-de-localizacao-animation-gif-download-4623980.gif", // Puri Temple
       originalPrice: 2000,
       offerPrice: 1600,
+      distance: "65 km",
+      duration: "1.5 hrs",
     },
     {
       id: 2,
       title: "Bhubaneswar to Konark",
-      images: [
-        "https://www.avis.co.in/blog/wp-content/uploads/2024/03/image1-4.jpg", // Bhubaneswar
-        location, // location icon
-        "https://i0.wp.com/thewanderingcore.com/wp-content/uploads/2017/03/img_3367.jpg?fit=4032%2C3024&ssl=1", // Konark
-      ],
+      image:
+        "https://cdnl.iconscout.com/lottie/premium/thumb/pesquisa-de-localizacao-animation-gif-download-4623980.gif", // Konark Sun Temple
       originalPrice: 1900,
       offerPrice: 1500,
+      distance: "85 km",
+      duration: "2.0 hrs",
+    },
+    {
+      id: 3,
+      title: "Bhubaneswar to Sambalpur",
+      image:
+        "https://cdnl.iconscout.com/lottie/premium/thumb/pesquisa-de-localizacao-animation-gif-download-4623980.gif", // Sambalpur
+      originalPrice: 3999,
+      offerPrice: 3699,
+      distance: "260 km",
+      duration: "5.6 hrs",
     },
   ];
 
@@ -39,89 +46,140 @@ export default function LocationCards() {
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             whileHover={{
-              scale: 1.05,
-              rotateY: 5,
-              boxShadow: "0 20px 40px rgba(0,0,0,0.3)",
+              scale: 1.02,
+              y: -10,
+              boxShadow: "0 25px 50px rgba(0,0,0,0.25)",
             }}
             transition={{
               duration: 0.6,
               hover: { duration: 0.3 },
             }}
             viewport={{ once: true }}
-            className="w-full sm:w-[90%] md:w-[45%] lg:w-[40%] bg-gradient-to-br from-yellow-400 via-yellow-300 to-yellow-200 m-2 md:m-6 rounded-2xl shadow-2xl overflow-hidden border-2 border-yellow-500 cursor-pointer"
+            className="w-full sm:w-[90%] md:w-[45%] lg:w-[400px] bg-gray-900 rounded-[0.6rem] shadow-xl overflow-hidden border border-gray-100 cursor-pointer"
           >
-            {/* Images Row */}
-            <div className="flex justify-between items-center bg-gradient-to-r from-gray-700 to-gray-900 p-2">
-              {loc.images.map((img, idx) => (
-                <motion.div
-                  key={idx}
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                  className={`flex-1 flex items-center justify-center ${
-                    idx === 1 ? "p-3" : ""
-                  }`}
-                >
-                  <img
-                    src={img}
-                    alt="location"
-                    className="w-full h-full sm:h-36 md:h-40 object-cover rounded-lg shadow-md"
-                  />
-                </motion.div>
-              ))}
+            {/* Main Image */}
+            <div className="relative overflow-hidden">
+              <motion.img
+                whileHover={{ scale: 1.1 }}
+                transition={{ duration: 0.5 }}
+                src={loc.image}
+                alt={loc.title}
+                className="w-full h-64 object-cover"
+              />
+              <div className="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                {Math.round(
+                  ((loc.originalPrice - loc.offerPrice) / loc.originalPrice) *
+                    100
+                )}
+                % OFF
+              </div>
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+                <div className="flex items-center text-white text-sm">
+                  <svg
+                    className="w-4 h-4 mr-1"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <span className="mr-4">{loc.distance}</span>
+                  <svg
+                    className="w-4 h-4 mr-1"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                  <span>{loc.duration}</span>
+                </div>
+              </div>
             </div>
 
-            {/* Text Content */}
-            <div className="p-4 text-center bg-white/80 backdrop-blur-sm">
+            {/* Content */}
+            <div className="p-6">
               <motion.h2
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                className="text-2xl sm:text-3xl font-bold text-gray-800 mb-3"
+                className="text-2xl font-bold text-white mb-4"
               >
                 {loc.title}
               </motion.h2>
 
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                className="flex flex-col sm:flex-row justify-center items-center gap-4"
-              >
+              {/* Price Section */}
+              <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
-                  <span className="line-through text-red-500 text-xl font-semibold">
+                  <span className="line-through text-gray-300 text-lg">
                     ₹{loc.originalPrice}
                   </span>
                   <span className="text-green-600 font-bold text-2xl">
                     ₹{loc.offerPrice}
                   </span>
                 </div>
+                <div className="text-sm text-gray-300">per trip</div>
+              </div>
 
-                <motion.button
-                  whileHover={{
-                    scale: 1.1,
-                    backgroundColor: "#1e40af",
-                    boxShadow: "0 10px 20px rgba(37, 99, 235, 0.4)",
-                  }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-6 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-lg transition-all duration-200"
-                  onClick={() => {
-                    const [pickup, drop] = loc.title.split(" to ");
-                    localStorage.setItem("pickup", pickup || "");
-                    localStorage.setItem("drop", drop || "");
-                    localStorage.setItem("bookingMode", "cab");
-                    window.location.href = "/bookingform";
-                  }}
-                >
-                  Book Now
-                </motion.button>
-              </motion.div>
+              {/* Features */}
+              <div className="flex items-center gap-4 mb-6 text-sm text-sky-500">
+                <div className="flex items-center">
+                  <svg
+                    className="w-4 h-4 mr-1 text-blue-300"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  AC Cab
+                </div>
+                <div className="flex items-center">
+                  <svg
+                    className="w-4 h-4 mr-1 text-blue-300"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Expert Driver
+                </div>
+                <div className="flex items-center">
+                  <svg
+                    className="w-4 h-4 mr-1 text-blue-300"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  Safe Travel
+                </div>
+              </div>
 
-              <motion.div
-                initial={{ width: 0 }}
-                whileInView={{ width: "100%" }}
-                transition={{ delay: 0.5, duration: 0.8 }}
-                className="mt-4 h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent rounded-full"
-              />
+              {/* Book Now Button */}
+              <motion.button
+                whileHover={{
+                  scale: 1.02,
+                  backgroundColor: "#1e40af",
+                  boxShadow: "0 10px 25px rgba(59, 130, 246, 0.3)",
+                }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full px-2 py-4 bg-[#FDC700] text-white font-bold text-lg rounded-[0.4rem] shadow-lg transition-all duration-200 hover:shadow-xl"
+                onClick={() => {
+                  const [pickup, drop] = loc.title.split(" to ");
+                  localStorage.setItem("pickup", pickup || "");
+                  localStorage.setItem("drop", drop || "");
+                  localStorage.setItem("bookingMode", "cab");
+                  window.location.href = "/bookingform";
+                }}
+              >
+                Book Now
+              </motion.button>
             </div>
           </motion.div>
         ))}

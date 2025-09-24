@@ -139,6 +139,7 @@ export default function Hero() {
                 name="carType"
                 onChange={handleChange}
                 className="p-2 rounded border border-gray-400 text-white"
+                required
               >
                 <option className="text-black">Select Car Type</option>
                 <option className="text-black">Mini</option>
@@ -153,6 +154,7 @@ export default function Hero() {
                 onChange={handleChange}
                 placeholder="Enter Pickup Location"
                 className="p-2 rounded bg-transparent border border-gray-400"
+                required
               />
 
               <label className="text-sm">Drop Location</label>
@@ -162,6 +164,7 @@ export default function Hero() {
                 onChange={handleChange}
                 placeholder="Enter Drop Location"
                 className="p-2 rounded bg-transparent border border-gray-400"
+                required
               />
 
               <motion.button
@@ -186,7 +189,7 @@ export default function Hero() {
                 name="license"
                 onChange={handleChange}
                 placeholder="Enter License No."
-                className="p-2 rounded bg-transparent border border-gray-400"
+                className="p-2 rounded bg-transparent border border-gray-400" required
               />
 
               <label className="text-sm">Dob</label>
@@ -194,7 +197,7 @@ export default function Hero() {
                 type="date"
                 name="dob"
                 onChange={handleChange}
-                className="p-2 rounded border border-gray-400 bg-gray-200 text-black"
+                className="p-2 rounded border border-gray-400 bg-gray-200 text-black" required
               />
 
               <label className="text-sm">Rental Duration (Hours)</label>
@@ -203,7 +206,7 @@ export default function Hero() {
                 name="duration"
                 onChange={handleChange}
                 placeholder="Enter Hours"
-                className="p-2 rounded bg-transparent border border-gray-400"
+                className="p-2 rounded bg-transparent border border-gray-400" required
               />
 
               <motion.button

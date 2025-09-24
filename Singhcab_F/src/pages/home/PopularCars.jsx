@@ -69,6 +69,7 @@ export default function PopularCars() {
               onHoverStart={() => setHoveredIndex(idx)}
               onHoverEnd={() => setHoveredIndex(null)}
               transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              onClick={() => handleNavigate(car.name)}
             >
               {/* Image */}
               <div className="w-full h-36 flex items-center justify-center overflow-hidden rounded-t-2xl bg-black">
@@ -83,17 +84,8 @@ export default function PopularCars() {
 
               {/* See All Cars Button */}
               <motion.button
-                initial={{ opacity: 0, y: 10 }}
-                animate={{
-                  opacity: hoveredIndex === idx ? 1 : 0,
-                  y: hoveredIndex === idx ? 0 : 10,
-                }}
                 transition={{ duration: 0.3 }}
-                className="absolute bottom-6  flex items-center justify-center space-x-2 px-2 py-2 bg-yellow-500 text-gray-900 font-bold rounded-[0.5rem] shadow-lg hover:bg-yellow-400 transition-colors duration-300"
-                style={{
-                  pointerEvents: hoveredIndex === idx ? "auto" : "none",
-                }}
-                onClick={() => handleNavigate(car.name)}
+                className="absolute bottom-6  flex items-center justify-center px-2 py-2 bg-yellow-500 text-gray-900 font-bold rounded-[0.5rem] shadow-lg hover:bg-yellow-400 transition-colors duration-300"
               >
                 <span>See All Cars</span>
                 <svg
