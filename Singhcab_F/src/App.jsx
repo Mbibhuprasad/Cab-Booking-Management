@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import { useState, useEffect } from "react";
 import Home from "./pages/home";
 import Contact from "./pages/Contact";
 import Navbar from "./component/Navbar";
@@ -9,8 +10,23 @@ import About from "./pages/About";
 import AdminPanel from "./component/admin/adminpanel";
 import BookingForm from "./component/Booking";
 import FloatingButtons from "./component/Floatingbuttons";
+import Loader from "./component/loader";
 
 function App() {
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 3000); // Adjust time as needed for loader animation
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading) {
+    return <Loader />;
+  }
   return (
     <>
       <Navbar />
