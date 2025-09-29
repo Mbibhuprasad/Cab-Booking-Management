@@ -299,7 +299,7 @@ export default function BookingForm({ selectedCar, onBookingSuccess }) {
                     name="startDate"
                     onChange={handleChange}
                     value={formData.startDate}
-                    className="p-2 rounded border border-gray-400 bg-gray-200 text-black"
+                    className="p-2 rounded w-full border border-gray-400 bg-gray-200 text-black"
                     required
                   />
 
@@ -309,7 +309,7 @@ export default function BookingForm({ selectedCar, onBookingSuccess }) {
                     name="endDate"
                     onChange={handleChange}
                     value={formData.endDate}
-                    className="p-2 rounded border border-gray-400 bg-gray-200 text-black"
+                    className="p-2 rounded border w-full border-gray-400 bg-gray-200 text-black"
                     required
                   />
                   <label className="text-sm">Your Name</label>
@@ -389,7 +389,7 @@ export default function BookingForm({ selectedCar, onBookingSuccess }) {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="col-span-2 bg-yellow-400 text-black font-bold py-2 rounded-lg mt-2 disabled:opacity-50"
+                  className="col-span-2 w-full  bg-yellow-400 text-black font-bold p-2 rounded-lg mt-4 disabled:opacity-50"
                 >
                   {isLoading ? "Processing..." : "BOOK NOW"}
                 </button>
@@ -493,7 +493,7 @@ export default function BookingForm({ selectedCar, onBookingSuccess }) {
                     name="dob"
                     onChange={handleChange}
                     value={formData.dob}
-                    className="p-2 rounded border border-gray-400 bg-gray-200 text-black"
+                    className="p-2 w-full rounded border border-gray-400 bg-gray-200 text-black"
                     required
                   />
 
@@ -535,7 +535,7 @@ export default function BookingForm({ selectedCar, onBookingSuccess }) {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="col-span-2 bg-yellow-400 text-black font-bold py-2 rounded-lg mt-2 disabled:opacity-50"
+                  className="col-span-2 w-full  bg-yellow-400 text-black font-bold p-2 rounded-lg mt-4 disabled:opacity-50"
                 >
                   {isLoading ? "Processing..." : "BOOK SELF DRIVE"}
                 </button>

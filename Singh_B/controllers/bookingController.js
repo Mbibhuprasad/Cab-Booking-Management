@@ -1,5 +1,5 @@
-import CabBooking from "../models/CabBooking.js";
-import SelfDriveBooking from "../models/SelfDriveBooking.js";
+import CabBooking from "../Models/CabBooking.js";
+import SelfDriveBooking from "../Models/SelfDriveBooking.js";
 import Car from "../Models/Car.js";
 
 // Utility function to fetch car types from the database
